@@ -1,0 +1,226 @@
+body {
+  color: white;
+  margin: 0;
+  padding: 0;
+  background-color: #e5e5f7;
+  opacity: 0.8;
+  background-size: 12px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+  perspective: 800px;
+  animation: changeDots 0.5s infinite alternate;
+}
+@font-face {
+  font-family:'Banana' ;
+  src: url(PolarVortex-raAA.ttf);
+}
+@keyframes changeDots {
+  0% {
+    background-size: 12px 12px;
+    background-image: radial-gradient(var(--reactive-color) 0.6px, #e5e5f7 0.6px);
+  }
+  6% {
+    background-size: 20px 20px;
+    background-image: radial-gradient(var(--reactive-color) 2px, #e5e5f7 2px);
+  }
+  14% {
+    background-size: 8px 8px;
+    background-image: radial-gradient(var(--reactive-color) 0.4px, #e5e5f7 0.4px);
+  }
+  18% {
+    background-size: 15px 15px;
+    background-image: radial-gradient(var(--reactive-color) 10.5px, #e5e5f7 1.5px);
+  }
+  20% {
+    background-size: 30px 30px;
+    background-image: radial-gradient(var(--reactive-color) 40px, #e5e5f7 4px);
+  }
+  100% {
+    background-size: 8px 8px;
+    background-image: radial-gradient(var(--reactive-color) 0.3px, #e5e5f7 0.3px);
+  }
+  20% {
+    background-size: 30px 30px;
+    background-image: radial-gradient(var(--reactive-color) 40px, #e5e5f7 4px);
+  }
+  22% {
+    background-size: 12px 12px;
+    background-image: radial-gradient(var(--reactive-color) 1px, #e5e5f7 1px);
+  }
+  81% {
+    background-size: 8px 8px;
+    background-image: radial-gradient(var(--reactive-color) 0.3px, #e5e5f7 0.3px);
+  }
+  26% {
+    background-size: 18px 18px;
+    background-image: radial-gradient(var(--reactive-color) 2px, #e5e5f7 2px);
+  }
+  28% {
+    background-size: 15px 15px;
+    background-image: radial-gradient(var(--reactive-color) 1.5px, #e5e5f7 1.5px);
+  }
+  54% {
+    background-size: 25px 25px;
+    background-image: radial-gradient(var(--reactive-color) 3px, #e5e5f7 3px);
+  }
+  90% {
+    background-size: 600px 600px;
+    background-image: radial-gradient(var(--reactive-color) 0.6px, #e5e5f7 0.6px);
+  }
+  96% {
+    background-size: 200px 200px;
+    background-image: radial-gradient(var(--reactive-color) 2.5px, #e5e5f7 2.5px);
+  }
+  36% {
+    background-size: 10px 10px;
+    background-image: rradial-gradient(var(--reactive-color) 1px, #e5e5f7 1px);
+  }
+  66% {
+    background-size: 22px 22px;
+    background-image: radial-gradient(var(--reactive-color) 20px, #e5e5f7 2px);
+  }
+  40% {
+    background-size: 5px 5px;
+    background-image: radial-gradient(var(--reactive-color) 0.3px, #e5e5f7 0.3px);
+  }
+  85% {
+    background-size: 16px 16px;
+    background-image: radial-gradient(var(--reactive-color) 10.8px, #e5e5f7 1.8px);
+  }
+  44% {
+    background-size: 30px 30px;
+    background-image: radial-gradient(var(--reactive-color) 4px, #e5e5f7 4px);
+  }
+  92% {
+    background-size: 9px 9px;
+    background-image: radial-gradient(var(--reactive-color) 0.7px, #e5e5f7 0.7px);
+  }
+  48% {
+    background-size: 18px 18px;
+    background-image: radial-gradient(var(--reactive-color) 1.8px, #e5e5f7 1.8px);
+  }
+  100% {
+    background-size: 102px 102px;
+    background-image: radial-gradient(var(--reactive-color) 1px, #e5e5f7 1px);
+  }
+
+  100% {
+    background-size: 8px 8px;
+    background-image: rradial-gradient(var(--reactive-color) 0.3px, #e5e5f7 0.3px);
+  }}
+
+h1 {
+  font-family: 'Banana', sans-serif; 
+  text-align: center; 
+  font-size: 5rem; 
+  color: black; 
+  margin: 0; 
+  position: absolute;
+  top: 20%; 
+  left: 50%;
+  transform: translate(-50%, -50%); 
+}
+ p {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 2rem;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
+               0 0 20px rgba(255, 255, 255, 0.5);
+  animation: glitch 1s infinite;
+  cursor: move; 
+  position: relative;
+  z-index: 1;
+}
+
+textarea, #output {
+  font-family:'Times New Roman', Times, serif;
+  width: 90%;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 10px;
+  border: 1px solid #2b2b2b;
+  background-color: rgba(255, 255, 255);
+  color: #000000;
+  font-size: 1.2rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.styled-output span {
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+textarea:hover, #output:hover {
+  transform: perspective(500px) rotateY(15deg);
+}
+
+button {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 1.2rem;
+  color: white;
+  background-color: rgba(0, 0, 0, 1);
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: help;
+  transition: transform 2s ease, background-color 2s ease;
+  perspective: 10px; 
+}
+
+button:hover {
+  transform: rotateY(1800deg); 
+  transform: rotateX(900deg); 
+
+  background-color: rgb(255, 0, 0);
+}
+
+
+#messageModal {
+  font-family:'Times New Roman', Times, serif;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  width: 80%;
+  max-width: 600px;
+  background-color: rgba(0, 0, 0);
+  color: white;
+  padding: 20px;
+  z-index: 1000;
+  overflow-y: auto;
+  max-height: 70vh;
+  animation: modalAppear 0.5s ease forwards;
+}
+
+@keyframes modalAppear {
+  0% { transform: translate(-50%, -50%) scale(0.8) rotateX(90deg); }
+  100% { transform: translate(-50%, -50%) scale(1) rotateX(0deg); }
+}
+
+#closeModal {
+  display: block;
+  text-align: right;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.2s ease;
+}
+
+.message {
+  font-size: 1rem;
+  background-color: rgba(0, 0, 0, 0.723);
+  padding: 5px;
+  margin: 5px 0;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+  animation: glitch 1.2s infinite;
+}
+

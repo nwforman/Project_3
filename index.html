@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>xpoemx</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDTZIXYLqaOexQueOXLOO1wTc38qP_pxCY",
+      authDomain: "project-3-85e74.firebaseapp.com",
+      databaseURL: "https://project-3-85e74-default-rtdb.firebaseio.com",
+      projectId: "project-3-85e74",
+      storageBucket: "project-3-85e74.appspot.com",
+      messagingSenderId: "762382023199",
+      appId: "1:762382023199:web:5fd8246d5c7dca11b4732a",
+      measurementId: "G-4EL913JZHN"
+    };
+    document.addEventListener('mousemove', (event) => {
+
+  const xPercent = Math.round((event.clientX / window.innerWidth) * 255 + 200);
+  const yPercent = Math.round((event.clientY / window.innerHeight) * 255 + 200);
+
+
+  const reactiveColor = `rgb(${xPercent}, ${yPercent}, 255,5)`;
+
+
+  document.documentElement.style.setProperty('--reactive-color', reactiveColor);
+});
+
+    let database;
+    try {
+      firebase.initializeApp(firebaseConfig);
+      database = firebase.database();
+      console.log("Firebase initialized:", firebase);
+    } catch (error) {
+      console.error("Error initializing Firebase:", error);
+    }
+
+    const exclusionList = ["and", "or", "but", "a", "an", "the", "in", "on", "at", "by", "with", "if", "for", "to", "of", "it", "it's", "is", "as", "she", "her", "hers", "he", "him", "his", "their", "they", "theirs", "that", "these", "this", "those", "where"];
+
+    async function findSynonyms() {
+      const inputText = document.getElementById('inputText').value.trim();
+      const userName = document.getElementById('userName').value.trim();
+      const feeling = document.getElementById('feeling').value.trim();
+      const outputDiv = document.getElementById('output');
+      outputDiv.innerHTML = ''; 
+
+      if (!userName) {
+        alert("Please enter your name.");
+        return;
+      }
+
+      const words = inputText.split(/\s+/);
+      let outputWords = [];
+      for (const word of words) {
+        const lowerWord = word.toLowerCase();
+        let finalWord = word;
+        if (!exclusionList.includes(lowerWord) && Math.random() < 0.6) {
+          const synonym = await getSynonym(word);
+          finalWord = synonym || word;
+        }
+
+        const wordSpan = document.createElement('span');
+        wordSpan.style.marginRight = `${Math.random() * 20}px`;
+
+        finalWord.split('').forEach(letter => {
+          const letterSpan = document.createElement('span');
+          letterSpan.textContent = letter;
+
+          letterSpan.style.fontSize = `${Math.random() * 20 + 10}px`;
+          letterSpan.style.fontWeight = Math.random() > 0.5 ? 'bold' : 'normal';
+          letterSpan.style.fontStyle = Math.random() > 0.5 ? 'italic' : 'normal';
+          letterSpan.style.fontFamily = getRandomFont();
+
+          wordSpan.appendChild(letterSpan);
+        });
+
+        outputDiv.appendChild(wordSpan);
+
+        if (Math.random() > 0.8) {
+          const lineBreak = document.createElement('br');
+          outputDiv.appendChild(lineBreak);
+        }
+
+        outputWords.push(finalWord);
+      }
+
+      saveToFirebase(userName, outputWords.join(' '), feeling, outputDiv.innerHTML);
+    }
+
+
+    function getRandomFont() {
+      const fonts = ['Arial', 'Georgia', 'Verdana', 'Tahoma', 'Courier New', 'Times New Roman'];
+      return fonts[Math.floor(Math.random() * fonts.length)];
+    }
+
+    async function getSynonym(word) {
+      const apiKey = '0db9ac21-121c-4f5f-b4c0-d06bfef78372';
+      const url = `https://www.dictionaryapi.com/api/v3/references/thesaurus/json/${word}?key=${apiKey}`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`API request failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (Array.isArray(data) && data.length > 0 && data[0].meta && data[0].meta.syns) {
+          const synonyms = data[0].meta.syns[0];
+          if (synonyms && synonyms.length > 0) {
+            return synonyms[Math.floor(Math.random() * synonyms.length)];
+          }
+        }
+        return null;
+      } catch (error) {
+        console.error("Error fetching synonym:", error);
+        return null;
+      }
+    }
+
+    function saveToFirebase(name, text, feeling, outputHTML) {
+      if (!database) {
+        console.error("Firebase database is not initialized.");
+        return;
+      }
+
+      const newResponseRef = database.ref('responses').push();
+      newResponseRef.set({ name: name, text: outputHTML, feeling: feeling }, (error) => {
+        if (error) {
+          console.error("Failed to save message:", error);
+        } else {
+          console.log("Message saved to Firebase successfully");
+        }
+      });
+    }
+
+    function openModal() {
+      document.getElementById("messageModal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("messageModal").style.display = "none";
+    }
+
+    if (database) {
+      database.ref('responses').on('child_added', (snapshot) => {
+        const data = snapshot.val();
+        const messageContainer = document.getElementById('messageContainer');
+
+        const responseElement = document.createElement('div');
+        responseElement.className = 'message';
+        responseElement.innerHTML = `<strong>${data.name} (${data.feeling}):</strong> ${data.text}`;
+
+        messageContainer.appendChild(responseElement);
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+      });
+    } else {
+      console.error("Firebase database is not initialized, cannot set up listeners.");
+    }
+  </script>
+</head>
+<body>
+
+  <div id="online-world">
+    <h1>Past    an  on ymous expppres ion</h1>
+    <p> <br> The o nly des s ire this ca n al ign wit h is wa nting<br> you. ou r wo0rds t oo loo o se meaon ing
+     <br> I work best with larger pieces of text. </p>
+
+    <input type="text" id="userName" placeholder="Enter your name" />
+    <input type="text" id="feeling" placeholder="Enter your feeling" />
+    <textarea id="inputText" placeholder="Type your text here..."></textarea>
+    <button onclick="findSynonyms()">CHANGE MY WORDS</button>
+    <button onclick="openModal()">Show All Responses</button>
+
+    <div id="output" class="styled-output"></div>
+
+    <div id="messageModal">
+      <span id="closeModal" onclick="closeModal()">×</span>
+      <h2>All Responses</h2>
+      <div id="messageContainer"></div>
+    </div>
+  </div>
+  <div id="offline-world" class="showPdf">
+    <h1>offline world</h1>
+   <p>Im sorry you dont have internet right now. That would make me pretty angry. 
+    But luckily, you dont need this site to utilize its function.
+    Heres what you do:
+    <br>Step 1: Write something. Pen and paper preferably. It can be a poem, a letter, a recipe, a text you sent, a memory you have, a passage from your least favorite book.
+    <br>Step 2: Crumple it up and throw it away. 
+    <br>Step 3: Run a mile or fight an animal or get married or watch a movie. Something to take your mind off what you wrote.
+   <br>Step 4: Reach into the trash and uncrumple the paper
+    <br>Step 5: Dont read what you wrote, just change the words. Not all of them, and some of them arent real, or right, but maybe most are synonyms. Use a thesaurus if you want.
+    <br>Step 6: Read it, paste the paper around town, or burn it</p>
+</div>
+<script src="offline-script.js"></script>  
+</body>
+</html>
